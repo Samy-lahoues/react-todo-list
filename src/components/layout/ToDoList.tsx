@@ -120,7 +120,7 @@ const ToDoList = ({
                 </div>
                 {/* To Do list */}
                 <div className="w-full h-full flex flex-col mb-10">
-                    <div className="flex-1 overflow-y-auto max-h-96">
+                    <div className="todolist flex-1 overflow-y-auto max-h-96">
                         {filteredTodos.map((todo) => (
                             <TodoCard
                                 taskId={todo.id}

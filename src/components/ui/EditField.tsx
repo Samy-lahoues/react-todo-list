@@ -1,17 +1,27 @@
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, KeyboardEvent } from "react";
 import { translations } from "../../constants";
+
 interface editFieldProps {
     isArabic: boolean;
     inputValue: { en: string; ar: string };
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
     addTask: () => void;
 }
+
 const EditField = ({
     inputValue,
     onChange,
     addTask,
     isArabic,
 }: editFieldProps) => {
+    // Handler for Enter key
+    const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+        const value = isArabic ? inputValue.ar : inputValue.en;
+        if (event.key === "Enter" && value.trim().length > 2) {
+            addTask();
+        }
+    };
+
     return (
         <div className="edit-field flex-end w-full mt-5 overflow-hidden px-6">
             <div className={`flex gap-x-3 ${isArabic && "flex-row-reverse"}`}>
@@ -30,10 +40,12 @@ const EditField = ({
                     }
                     value={isArabic ? inputValue.ar : inputValue.en}
                     onChange={onChange}
+                    onKeyDown={handleKeyDown}
                     className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white outline-none"
                 />
             </div>
         </div>
     );
 };
+
 export default EditField;
