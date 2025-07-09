@@ -5,32 +5,32 @@ export interface toDosTypes {
     priority: "high" | "medium" | "low";
     dueDate: string;
 }
-const defaultToDos: toDosTypes[] = [
-    {
-        id: 1,
-        text: {
-            en: "Complete project documentation",
-            ar: "إكمال توثيق المشروع",
-        },
-        completed: false,
-        priority: "high",
-        dueDate: "2025-07-04",
-    },
-    {
-        id: 2,
-        text: { en: "Review code changes", ar: "مراجعة تغييرات الكود" },
-        completed: true,
-        priority: "medium",
-        dueDate: "2025-07-04",
-    },
-    {
-        id: 3,
-        text: { en: "Plan team meeting", ar: "تخطيط اجتماع الفريق" },
-        completed: false,
-        priority: "low",
-        dueDate: "2025-07-04",
-    },
-];
+// const defaultToDos: toDosTypes[] = [
+//     {
+//         id: 1,
+//         text: {
+//             en: "Complete project documentation",
+//             ar: "إكمال توثيق المشروع",
+//         },
+//         completed: false,
+//         priority: "high",
+//         dueDate: "2025-07-04",
+//     },
+//     {
+//         id: 2,
+//         text: { en: "Review code changes", ar: "مراجعة تغييرات الكود" },
+//         completed: true,
+//         priority: "medium",
+//         dueDate: "2025-07-04",
+//     },
+//     {
+//         id: 3,
+//         text: { en: "Plan team meeting", ar: "تخطيط اجتماع الفريق" },
+//         completed: false,
+//         priority: "low",
+//         dueDate: "2025-07-04",
+//     },
+// ];
 const translations = {
     language: { en: "English", ar: "العربية" },
     logo: { en: "ToDo List", ar: "قائمة المهام" },
@@ -70,5 +70,13 @@ const translations = {
     details: { en: "Details", ar: "" },
     inputTitlePlaceholder: { en: "Task title", ar: "عنوان المهمة" },
     inputDetailsPlaceholder: { en: "Task Details", ar: "تفاصيل المهمة" },
+    titleConfirmation: {
+        en: "Are you sure you want to delete the task?",
+        ar: "هل أنت متأكد من رغبتك في حذف المهمة؟",
+    },
+    descriptionConfirmation: {
+        en: "You can't undo deleting the task.",
+        ar: "لا يمكنك التراجع عن الحذف بعد اتمامه",
+    },
 };
-export { defaultToDos, translations };
+export { translations };

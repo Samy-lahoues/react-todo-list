@@ -3,9 +3,10 @@ import { translations } from "../../constants";
 const TodoCard = ({
     text,
     onComplete,
+    onDelete,
+    onEdit,
     completed,
     taskId,
-    onDelete,
     isArabic,
     dueDate,
 }: {
@@ -16,6 +17,7 @@ const TodoCard = ({
     taskId: number;
     dueDate: string;
     onDelete: (taskId: number) => void;
+    onEdit: (taskId: number) => void;
 }) => {
     return (
         <div
@@ -68,6 +70,7 @@ const TodoCard = ({
                 {/* right Side */}
                 <div className=" flex gap-2.5">
                     <button
+                        onClick={() => onEdit(taskId)}
                         className="bg-blue-500 hover:bg-blue-600 icon-button"
                         title={translations.edit[isArabic ? "ar" : "en"]}
                     >

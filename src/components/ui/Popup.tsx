@@ -1,21 +1,22 @@
 import type { ReactNode } from "react";
 const Popup = ({
     children,
+    onClose,
     padding,
-    onBgClick,
     width,
     height,
 }: {
     children: ReactNode;
+    onClose: () => void;
     padding: string;
-    onBgClick: () => void;
     width: number;
     height: number;
 }) => {
     return (
         <div
-            onClick={onBgClick}
-            className="absolute w-full z-10 top-0 left-0 h-screen bg-black-transparent flex flex-center"
+            onClick={onClose}
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+            className="absolute w-full z-10 top-0 left-0 h-screen flex flex-center"
         >
             <div
                 style={{ width, height }}

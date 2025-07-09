@@ -1,24 +1,31 @@
 import { useState } from "react";
 import type { ChangeEvent } from "react";
-import type { toDosTypes } from "../../constants";
 import { useLanguage } from "../../hooks/useLanguage";
-import { translations, defaultToDos } from "../../constants";
+import { translations, type toDosTypes } from "../../constants";
 import FilterButton from "../ui/FilterButton";
 import TodoCard from "../ui/TodoCard";
 import EditField from "../ui/EditField";
-import { getTodaysDate } from "../../lib/actions";
-
+import { getTodaysDate } from "../../lib/utils";
+import { useToast } from "../../hooks/useToast";
 type filters = "all" | "active" | "completed";
 
-const ToDoList = () => {
-    const [todos, setToDos] = useState<toDosTypes[]>(defaultToDos);
+const ToDoList = ({
+    todos,
+    setToDos,
+    onDeleteClick,
+    onEditClick,
+}: {
+    todos: toDosTypes[];
+    setToDos: React.Dispatch<React.SetStateAction<toDosTypes[]>>;
+    onDeleteClick: (taskId: number) => void;
+    onEditClick: (taskid: number) => void;
+}) => {
     const [filter, setFilter] = useState<filters>("all");
     const { isArabic } = useLanguage();
-    const [toast, setToast] = useState("");
+    const { toast } = useToast();
+    // Event handlers
     const [taskInput, setTaskInput] = useState({ en: "", ar: "" });
-    const handleDeleteTask = (taskId: number) => {
-        setToDos((prev) => prev.filter((todo) => todo.id !== taskId));
-    };
+
     const filteredTodos = todos.filter((todo) => {
         if (filter === "active") return !todo.completed;
         if (filter === "completed") return todo.completed;
@@ -32,6 +39,7 @@ const ToDoList = () => {
             return todo;
         });
         setToDos(newTodos);
+        localStorage.setItem("todos", JSON.stringify(newTodos));
     };
     const handleTaskInput = (event: ChangeEvent<HTMLInputElement>) => {
         setTaskInput((prev) => {
@@ -46,9 +54,9 @@ const ToDoList = () => {
         if (
             !(taskInput.ar.trim().length > 2 || taskInput.en.trim().length > 2)
         ) {
+            showErrorToast();
             return false;
         } else {
-            setToast("Enter a valid task title please!");
             return true;
         }
     };
@@ -64,8 +72,23 @@ const ToDoList = () => {
                     dueDate: getTodaysDate(),
                 },
             ]);
+            localStorage.setItem("todos", JSON.stringify(todos));
             setTaskInput({ en: "", ar: "" });
+            showSuccessToast();
         }
+    };
+    const showSuccessToast = () => {
+        toast({
+            title: "Success!",
+            description: "Your task has been created successfully",
+        });
+    };
+    const showErrorToast = () => {
+        toast({
+            title: "Error",
+            description: "Enter a valid task title please!",
+            variant: "destructive",
+        });
     };
     return (
         <div className="relative w-xl h-[645px] bg-white dark:bg-gray-800 rounded-lg ring shadow-xl ring-gray-900/5 p-5">
@@ -100,7 +123,6 @@ const ToDoList = () => {
                     <div className="flex-1 overflow-y-auto max-h-96">
                         {filteredTodos.map((todo) => (
                             <TodoCard
-                                onDelete={handleDeleteTask}
                                 taskId={todo.id}
                                 key={todo.id}
                                 isArabic={isArabic}
@@ -108,6 +130,8 @@ const ToDoList = () => {
                                 onComplete={handleCheckTask}
                                 completed={todo.completed}
                                 dueDate={todo.dueDate}
+                                onDelete={onDeleteClick}
+                                onEdit={onEditClick}
                             />
                         ))}
                     </div>
