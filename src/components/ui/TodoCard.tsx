@@ -1,18 +1,25 @@
 import { Check, Calendar, Edit3, Trash2 } from "lucide-react";
 import { translations } from "../../constants";
+import type { ChangeEvent } from "react";
+type priorityTypes = "high" | "low" | "medium";
+
 const TodoCard = ({
     text,
     onComplete,
+    onPrioritize,
     onDelete,
     onEdit,
     completed,
+    priority,
     taskId,
     isArabic,
     dueDate,
 }: {
     text: string;
     onComplete: (taskId: number) => void;
+    onPrioritize: (taskId: number, priority: priorityTypes) => void;
     completed: boolean;
+    priority: priorityTypes;
     isArabic: boolean;
     taskId: number;
     dueDate: string;
@@ -52,11 +59,29 @@ const TodoCard = ({
                                 isArabic && "flex-row-reverse"
                             }`}
                         >
-                            <span
-                                className={`text-sm px-1.5 py-1 rounded-xl bg-yellow-600`}
+                            <select
+                                disabled={completed}
+                                onChange={(
+                                    event: ChangeEvent<HTMLSelectElement>
+                                ) =>
+                                    onPrioritize(
+                                        taskId,
+                                        event?.target.value as priorityTypes
+                                    )
+                                }
+                                value={priority}
+                                className={`text-sm capitalize font-semibold text-center px-1.5 py-1 rounded-xl hover:cursor-pointer ${
+                                    priority === "high"
+                                        ? "bg-red-600"
+                                        : priority === "medium"
+                                        ? "bg-yellow-600"
+                                        : "bg-green-600"
+                                }`}
                             >
-                                Medium
-                            </span>
+                                <option value="low">low</option>
+                                <option value="medium">medium</option>
+                                <option value="high">high</option>
+                            </select>
                             <div
                                 className={`text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1`}
                             >
@@ -70,6 +95,7 @@ const TodoCard = ({
                 {/* right Side */}
                 <div className=" flex gap-2.5">
                     <button
+                        disabled={completed}
                         onClick={() => onEdit(taskId)}
                         className="bg-blue-500 hover:bg-blue-600 icon-button"
                         title={translations.edit[isArabic ? "ar" : "en"]}

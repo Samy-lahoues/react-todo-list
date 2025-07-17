@@ -41,6 +41,19 @@ const ToDoList = ({
         setToDos(newTodos);
         localStorage.setItem("todos", JSON.stringify(newTodos));
     };
+    const handlePrioritySelection = (
+        taskId: number,
+        priority: "high" | "low" | "medium"
+    ) => {
+        const newTodos = todos.map((todo) => {
+            if (todo.id === taskId) {
+                return { ...todo, priority };
+            }
+            return todo;
+        });
+        setToDos(newTodos);
+        localStorage.setItem("todos", JSON.stringify(newTodos));
+    };
     const handleTaskInput = (event: ChangeEvent<HTMLInputElement>) => {
         setTaskInput((prev) => {
             if (isArabic) {
@@ -129,7 +142,9 @@ const ToDoList = ({
                                 text={todo.text[isArabic ? "ar" : "en"]}
                                 onComplete={handleCheckTask}
                                 completed={todo.completed}
+                                priority={todo.priority}
                                 dueDate={todo.dueDate}
+                                onPrioritize={handlePrioritySelection}
                                 onDelete={onDeleteClick}
                                 onEdit={onEditClick}
                             />
