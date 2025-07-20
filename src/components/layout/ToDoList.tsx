@@ -104,15 +104,16 @@ const ToDoList = ({
     });
   };
   return (
-    <div className="relative w-xl h-[645px] bg-white dark:bg-gray-800 rounded-lg ring shadow-xl ring-gray-900/5 p-5">
+    <div
+      className={`relative mt-20 w-xl h-[590px] md:h-[645px] bg-white dark:bg-gray-800 rounded-lg ring shadow-xl ring-gray-900/5 p-5`}
+    >
       <div className="flex flex-col items-center">
-        <h1 className="text-6xl font-bold pb-4">
+        <h1 className="text-5xl md:text-6xl font-bold pb-2 md:pb-4 max-md:pt-4">
           {translations.title[isArabic ? "ar" : "en"]}
         </h1>
-        <hr className="bg-gray-500 dark:bg-white" />
         {/* Filters */}
         <div
-          className={`flex mb-6 mt-5 mx-auto ${isArabic && "flex-row-reverse"}`}
+          className={`flex mb-5 md:mb-6 mt-5 mx-auto ${isArabic && "flex-row-reverse"}`}
         >
           {(["all", "completed", "active"] as const).map(
             (filterType, index) => (
