@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useLanguage } from "../hooks/useLanguage";
+import useIsMobile from "../hooks/useIsMobile";
 // Define types for better structure
 interface Feature {
   icon: string;
@@ -15,7 +16,7 @@ interface TechItem {
 
 function About() {
   const { isArabic } = useLanguage();
-
+  const isMobile = useIsMobile();
   // Current language selector
   const currentLang = isArabic ? "ar" : "en";
 
@@ -170,10 +171,12 @@ function About() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-500 dark:text-white pt-12">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 max-w-4xl mt-12">
         {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <div
+          className={`${!isMobile ? "text-center" : isArabic ? "text-right" : "text-left"} mb-12`}
+        >
+          <h1 className="text-4xl text-center md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             {translations.pageTitle[currentLang]}
           </h1>
           <h2 className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-6">
