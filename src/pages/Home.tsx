@@ -109,16 +109,13 @@ function Home() {
       }
 
       try {
-        const url = import.meta.env.VITE_TRANSLATION_API_URL;
+        const url = "/.netlify/functions/translate";
         const options = {
           method: "POST",
           headers: {
-            accept: "application/json",
             "content-type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_TRANSLATION_API_KEY}`,
           },
           body: JSON.stringify({
-            platform: "api",
             from: sourceLang,
             to: targetLang,
             data: textToTranslate,

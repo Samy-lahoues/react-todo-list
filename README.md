@@ -70,6 +70,35 @@ npm run build
 npm run preview
 ```
 
+## 🚀 Deployment
+
+### Netlify Deployment
+
+This app is configured for easy deployment on Netlify with serverless functions for secure API handling.
+
+#### Environment Variables Setup
+
+The app uses a translation API that requires secure environment variables. Set these in your Netlify dashboard:
+
+1. Go to your Netlify site dashboard
+2. Navigate to **Site settings > Environment variables**
+3. Add the following variables:
+
+```
+VITE_TRANSLATION_API_URL=your_translation_api_endpoint
+VITE_TRANSLATION_API_KEY=your_translation_api_key
+```
+
+#### Deployment Steps
+
+1. Connect your GitHub repository to Netlify
+2. Set build command: `npm run build`
+3. Set publish directory: `dist`
+4. Add environment variables as described above
+5. Deploy!
+
+The app includes serverless functions that securely handle translation API calls, ensuring your API keys are never exposed to the client.
+
 ## 📂 Project Structure
 
 ```
