@@ -171,8 +171,13 @@
     @apply flex items-center justify-center;
 }
 .icon-button {
-    @apply p-2 text-white rounded-lg transition-colors;
+    @apply p-1.5 sm:p-2 rounded-md text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
 }
+
+.icon-button svg {
+    @apply w-3 h-3 sm:w-4 sm:h-4;
+}
+
 .edit-field {
     position: absolute;
     bottom: 23px;
