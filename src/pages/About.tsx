@@ -270,7 +270,7 @@ function About() {
                 <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
                   {/* <span className="text-white text-2xl font-bold">SL</span> */}
                   <img
-                    src="public/developer-avatar.jpg"
+                    src="/developer-avatar.jpg"
                     alt="developer-avatar"
                     className="w-full h-full object-cover"
                   />
