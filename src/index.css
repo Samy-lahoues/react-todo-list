@@ -66,8 +66,17 @@
     --input-placeholder: #9ca3af;
 
     /* Toast Colors */
-    --toast-bg: #10b981;
-    --toast-text: #ffffff;
+    --toast-bg: #ffffff;
+    --toast-text: #1f2937;
+    --toast-border: #e5e7eb;
+    --toast-success-bg: #10b981;
+    --toast-success-text: #ffffff;
+    --toast-error-bg: #ef4444;
+    --toast-error-text: #ffffff;
+    --toast-warning-bg: #f59e0b;
+    --toast-warning-text: #ffffff;
+    --toast-info-bg: #3b82f6;
+    --toast-info-text: #ffffff;
 }
 
 /* Dark Theme Colors */
@@ -102,6 +111,19 @@
     --input-border-focus: #6366f1;
     --input-text: #f9fafb;
     --input-placeholder: #9ca3af;
+
+    /* Toast Colors - Dark */
+    --toast-bg: #374151;
+    --toast-text: #f9fafb;
+    --toast-border: #4b5563;
+    --toast-success-bg: #059669;
+    --toast-success-text: #ffffff;
+    --toast-error-bg: #dc2626;
+    --toast-error-text: #ffffff;
+    --toast-warning-bg: #d97706;
+    --toast-warning-text: #ffffff;
+    --toast-info-bg: #2563eb;
+    --toast-info-text: #ffffff;
 }
 
 @theme {
@@ -132,6 +154,18 @@
     --color-input-border-focus: var(--input-border-focus);
     --color-input-text: var(--input-text);
     --color-input-placeholder: var(--input-placeholder);
+
+    --color-toast-bg: var(--toast-bg);
+    --color-toast-text: var(--toast-text);
+    --color-toast-border: var(--toast-border);
+    --color-toast-success-bg: var(--toast-success-bg);
+    --color-toast-success-text: var(--toast-success-text);
+    --color-toast-error-bg: var(--toast-error-bg);
+    --color-toast-error-text: var(--toast-error-text);
+    --color-toast-warning-bg: var(--toast-warning-bg);
+    --color-toast-warning-text: var(--toast-warning-text);
+    --color-toast-info-bg: var(--toast-info-bg);
+    --color-toast-info-text: var(--toast-info-text);
 }
 .flex-center {
     @apply flex items-center justify-center;
@@ -154,15 +188,15 @@
 }
 
 .todolist::-webkit-scrollbar {
-	width: 8px;
+    width: 8px;
 }
 
 .todolist::-webkit-scrollbar-track {
-	background: rgba(255, 255, 255, 0.1);
-	border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
 }
 
 .todolist::-webkit-scrollbar-thumb {
-	background: oklch(51.1% 0.262 276.966);
-        border-radius: 10px;
-    }
+    background: oklch(51.1% 0.262 276.966);
+    border-radius: 10px;
+}
