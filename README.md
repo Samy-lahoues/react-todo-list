@@ -7,7 +7,7 @@
 
 A modern, feature-rich Todo List application built with **React**, **TypeScript**, and **TailwindCSS**. This project demonstrates best practices in React development including context-based state management, theming, localization, and responsive UI.
 
-![App Screenshot](./screenshot.png) <!-- Add a screenshot here -->
+![App Screenshot](./public/screenshot.png) <!-- Add a screenshot here -->
 
 ## ✨ Key Features
 
@@ -15,7 +15,6 @@ A modern, feature-rich Todo List application built with **React**, **TypeScript*
 |---------|-------------|
 | **📌 Task Management** | Add, complete, edit, and delete tasks with intuitive controls |
 | **🎯 Prioritization** | Categorize tasks with High/Medium/Low priority indicators |
-| **📅 Due Dates** | Set and visualize task deadlines with date picker |
 | **🌗 Dark/Light Mode** | Context-based theme switching with system preference detection |
 | **🌐 Multi-language** | English/Arabic support with RTL layout switching |
 | **🔍 Smart Filtering** | Filter by All/Active/Completed status |
@@ -152,8 +151,8 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📬 Contact
 
-**Samy Lahoues** - [@Samy-lahoues](https://github.com/Samy-lahoues)  
-📧 samylahoues@outlook.com  
+**Samy Lahoues** - [@Samy-lahoues](https://github.com/Samy-lahoues)
+📧 samylahoues@outlook.com
 💼 [LinkedIn Profile](https://linkedin.com/in/samy-lahoues)
 
 ## 🙏 Acknowledgments
