@@ -18,15 +18,15 @@ const TodoCard = ({
   dueDate,
 }: {
   text: string;
-  onComplete: (taskId: number) => void;
-  onPrioritize: (taskId: number, priority: priorityTypes) => void;
+  onComplete: (taskId: string) => void;
+  onPrioritize: (taskId: string, priority: priorityTypes) => void;
   completed: boolean;
   priority: priorityTypes;
   isArabic: boolean;
-  taskId: number;
+  taskId: string;
   dueDate: string;
-  onDelete: (taskId: number) => void;
-  onEdit: (taskId: number) => void;
+  onDelete: (taskId: string) => void;
+  onEdit: (taskId: string) => void;
 }) => {
   const isMobile = useIsMobile();
 

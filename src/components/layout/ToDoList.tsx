@@ -1,58 +1,42 @@
 import { useState } from "react";
 import type { ChangeEvent } from "react";
 import { useLanguage } from "../../hooks/useLanguage";
-import { translations, type toDosTypes } from "../../constants";
+import { translations } from "../../constants";
 import FilterButton from "../ui/FilterButton";
 import TodoCard from "../ui/TodoCard";
 import EditField from "../ui/EditField";
-import { getTodaysDate } from "../../lib/utils";
-import { useToast } from "../../hooks/useToast";
+import { useTodos } from "../../hooks/useTodos";
+import useValidation from "../../hooks/useValidation";
 type filters = "all" | "active" | "completed";
 
 const ToDoList = ({
-  todos,
-  setToDos,
   onDeleteClick,
   onEditClick,
 }: {
-  todos: toDosTypes[];
-  setToDos: React.Dispatch<React.SetStateAction<toDosTypes[]>>;
-  onDeleteClick: (taskId: number) => void;
-  onEditClick: (taskid: number) => void;
+  onDeleteClick: (taskId: string) => void;
+  onEditClick: (taskid: string) => void;
 }) => {
   const [filter, setFilter] = useState<filters>("all");
   const { isArabic } = useLanguage();
-  const { toast } = useToast();
-  // Event handlers
   const [taskInput, setTaskInput] = useState({ en: "", ar: "" });
+  const { todos, dispatch } = useTodos();
 
+  // Validation hook
+  const { validateTodoTitle, getFieldError, hasFieldError, clearErrors } =
+    useValidation();
   const filteredTodos = todos.filter((todo) => {
     if (filter === "active") return !todo.completed;
     if (filter === "completed") return todo.completed;
     return true;
   });
-  const handleCheckTask = (taskId: number) => {
-    const newTodos = todos.map((todo) => {
-      if (todo.id === taskId) {
-        return { ...todo, completed: !todo.completed };
-      }
-      return todo;
-    });
-    setToDos(newTodos);
-    localStorage.setItem("todos", JSON.stringify(newTodos));
+  const handleCheckTask = (taskId: string) => {
+    dispatch({ type: "check_task", taskId });
   };
   const handlePrioritySelection = (
-    taskId: number,
+    taskId: string,
     priority: "high" | "low" | "medium",
   ) => {
-    const newTodos = todos.map((todo) => {
-      if (todo.id === taskId) {
-        return { ...todo, priority };
-      }
-      return todo;
-    });
-    setToDos(newTodos);
-    localStorage.setItem("todos", JSON.stringify(newTodos));
+    dispatch({ type: "priority_selection", taskId, priority });
   };
   const handleTaskInput = (event: ChangeEvent<HTMLInputElement>) => {
     setTaskInput((prev) => {
@@ -63,46 +47,23 @@ const ToDoList = ({
       }
     });
   };
-  const validateInput = () => {
-    if (!(taskInput.ar.trim().length > 2 || taskInput.en.trim().length > 2)) {
-      showErrorToast();
-      return false;
-    } else {
-      return true;
-    }
-  };
+
   const addTask = () => {
-    if (validateInput()) {
-      setToDos((prev) => [
-        ...prev,
-        {
-          id: prev.length > 0 ? prev[prev.length - 1].id + 1 : 1,
-          text: taskInput,
-          completed: false,
-          priority: "low" as const,
-          dueDate: getTodaysDate(),
-        },
-      ]);
-      localStorage.setItem("todos", JSON.stringify(todos));
-      setTaskInput({ en: "", ar: "" });
-      showSuccessToast();
+    // Clear previous errors
+    clearErrors();
+
+    // Validate input
+    const validationResult = validateTodoTitle(taskInput);
+
+    if (!validationResult.isValid) {
+      return;
     }
-  };
-  const showSuccessToast = () => {
-    toast({
-      title: "Success!",
-      description: "Your task has been created successfully",
-      variant: "success",
-    });
+
+    // Dispatch the action if validation passes
+    dispatch({ type: "add_task", payload: { title: taskInput } });
+    setTaskInput({ en: "", ar: "" });
   };
 
-  const showErrorToast = () => {
-    toast({
-      title: "Error",
-      description: "Enter a valid task title please!",
-      variant: "destructive",
-    });
-  };
   return (
     <div
       className={`relative mt-20 w-xl h-[590px] md:h-[645px] bg-white dark:bg-gray-800 rounded-lg ring shadow-xl ring-gray-900/5 p-5`}
@@ -142,7 +103,11 @@ const ToDoList = ({
                 taskId={todo.id}
                 key={todo.id}
                 isArabic={isArabic}
-                text={todo.text[isArabic ? "ar" : "en"]}
+                text={
+                  todo.text?.[isArabic ? "ar" : "en"] ||
+                  todo.text?.[isArabic ? "en" : "ar"] ||
+                  "Untitled Task"
+                }
                 onComplete={handleCheckTask}
                 completed={todo.completed}
                 priority={todo.priority}
@@ -158,6 +123,16 @@ const ToDoList = ({
             addTask={addTask}
             onChange={handleTaskInput}
             isArabic={isArabic}
+            hasError={
+              hasFieldError("title") ||
+              hasFieldError("English title") ||
+              hasFieldError("Arabic title")
+            }
+            errorMessage={
+              getFieldError("title") ||
+              getFieldError("English title") ||
+              getFieldError("Arabic title")
+            }
           />
         </div>
       </div>

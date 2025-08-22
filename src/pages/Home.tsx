@@ -5,22 +5,24 @@ import {
   useCallback,
   type ChangeEvent,
 } from "react";
+import { useTodos } from "../hooks/useTodos";
 import ToDoList from "../components/layout/ToDoList";
 import Popup from "../components/ui/Popup";
 import { translations } from "../constants";
 import { useLanguage } from "../hooks/useLanguage";
 import { toast } from "../hooks/useToast";
-import type { toDosTypes } from "../constants";
+import { loadTodosFromStorage } from "../lib/utils";
 
 function Home() {
   const [editedTaskTitle, setEditedTaskTitle] = useState({ en: "", ar: "" });
-  const [todos, setToDos] = useState<toDosTypes[] | []>([]);
+  // const [todos, setToDos] = useState<toDosTypes[] | []>([]);
+  const { todos, dispatch } = useTodos();
   const { isArabic } = useLanguage();
   const [isConfirmDeleteActive, setIsConfirmDeleteActive] =
     useState<boolean>(false);
   const [isEditActive, setIsEditActive] = useState(false);
-  const [taskToDelete, setTaskToDelete] = useState<number | null>(null);
-  const [taskToEdit, setTaskToEdit] = useState<number | null>(null);
+  const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
+  const [taskToEdit, setTaskToEdit] = useState<string | null>(null);
 
   // Memoized translation texts for better performance
   const translatedTexts = useMemo(
@@ -60,16 +62,17 @@ function Home() {
 
   // Memoized task finder function
   const findTaskById = useMemo(() => {
-    return (taskId: number) => {
+    return (taskId: string) => {
       return todos.find((todo) => todo.id === taskId);
     };
   }, [todos]);
 
   // Render tasks that has been created before
   useEffect(() => {
-    const storedTodos = JSON.parse(localStorage.todos || "[]");
-    setToDos(storedTodos);
-  }, []);
+    const storedTodos = loadTodosFromStorage();
+    dispatch({ type: "update", todos: storedTodos });
+    // setToDos(storedTodos);
+  }, [dispatch]);
 
   // Translate tasks from arabic to english or from english to arabic
   useEffect(() => {
@@ -152,7 +155,7 @@ function Home() {
           return todo;
         });
 
-        setToDos(newTodos);
+        dispatch({ type: "update", todos: newTodos });
         localStorage.setItem("todos", JSON.stringify(newTodos));
       } catch (e) {
         console.error(
@@ -163,10 +166,10 @@ function Home() {
     };
 
     translateTask();
-  }, [todos.length]);
+  }, [dispatch, todos]);
 
   // Event handlers
-  const openDeletePopup = (taskId: number) => {
+  const openDeletePopup = (taskId: string) => {
     setTaskToDelete(taskId);
     setIsConfirmDeleteActive(true);
   };
@@ -178,11 +181,7 @@ function Home() {
 
   const handleDeleteTask = useCallback(() => {
     if (taskToDelete !== null) {
-      setToDos((prev) => {
-        const newTodos = prev.filter((todo) => todo.id !== taskToDelete);
-        localStorage.setItem("todos", JSON.stringify(newTodos));
-        return newTodos;
-      });
+      dispatch({ type: "delete_task", taskToDelete });
       // Show delete success toast
       setTimeout(() => {
         toast({
@@ -192,10 +191,10 @@ function Home() {
         });
       }, 100);
     }
-  }, [taskToDelete]);
+  }, [taskToDelete, dispatch]);
 
   const openEditPopup = useCallback(
-    (taskId: number) => {
+    (taskId: string) => {
       const task = findTaskById(taskId);
       const taskText = task ? (isArabic ? task.text.ar : task.text.en) : "";
 
@@ -217,19 +216,14 @@ function Home() {
   }, []);
 
   const handleEditTask = useCallback(() => {
-    if (taskToEdit !== null) {
-      setToDos((prev) => {
-        const editedTodos = prev.map((todo) => {
-          if (taskToEdit === todo.id) {
-            return { ...todo, text: editedTaskTitle };
-          }
-          return todo;
-        });
-        localStorage.setItem("todos", JSON.stringify(editedTodos));
-        return editedTodos;
+    if (taskToEdit) {
+      dispatch({
+        type: "edit_task",
+        taskToEdit,
+        editedTaskTitle,
       });
     }
-  }, [taskToEdit, editedTaskTitle]);
+  }, [taskToEdit, editedTaskTitle, dispatch]);
 
   const handlePopupInput = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -313,12 +307,7 @@ function Home() {
         </Popup>
       )}
       <div className="flex justify-center items-center h-screen">
-        <ToDoList
-          todos={todos}
-          setToDos={setToDos}
-          onDeleteClick={openDeletePopup}
-          onEditClick={openEditPopup}
-        />
+        <ToDoList onDeleteClick={openDeletePopup} onEditClick={openEditPopup} />
       </div>
     </div>
   );
